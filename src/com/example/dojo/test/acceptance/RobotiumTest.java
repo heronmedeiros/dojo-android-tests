@@ -9,9 +9,11 @@ import com.example.dojo1.R;
 import com.jayway.android.robotium.solo.Solo;
 
 public class RobotiumTest extends ActivityInstrumentationTestCase2{
-	private static final String TARGET_PACKAGE_ID="com.example.dojo1";
-	private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME="com.example.dojo1.ConverterActivity";
+	private static final String TARGET_PACKAGE_ID                = "com.example.dojo1";
+	private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "com.example.dojo1.ConverterActivity";
+	
 	private static Class launcherActivityClass;
+	
 	static{
 		try
 		{
@@ -25,8 +27,6 @@ public class RobotiumTest extends ActivityInstrumentationTestCase2{
 		super(launcherActivityClass);
 	}
 
-
-
 	Solo solo;
 	
 	@Override
@@ -35,28 +35,41 @@ public class RobotiumTest extends ActivityInstrumentationTestCase2{
 		solo = new Solo(getInstrumentation(),getActivity());
 	}
 
-	public void testDisplayBlackBox() {
-	
+	public void testIf10and1Return3() {
+		//setup
 		solo.enterText((EditText) solo.getView(R.id.editText1), "10");
-	
 		solo.enterText((EditText) solo.getView(R.id.editText2), "1");
 
-		
+		//action
 		solo.clickOnEditText(0);
 	
+		//assert
 		assertTrue(solo.searchText("3"));
 	}
+	
+	public void testWrongDigitCallToast() {
+		//setup
+		solo.enterText((EditText) solo.getView(R.id.editText1), "12");
+		solo.enterText((EditText) solo.getView(R.id.editText2), "1");
 
-	@Override
-	public void tearDown() throws Exception {
-		solo.finishOpenedActivities();
+		//action
+		solo.clickOnEditText(0);
+	
+		//assert
+		assertTrue(solo.searchText("U CANNOT DO THIS")	); //toast
 	}
+	
 
-	public void TestrightActivity(){
-		solo = new Solo(getInstrumentation(),getActivity());
+		@Override
+		public void tearDown() throws Exception {
+			solo.finishOpenedActivities();
+		}
+	
+		public void TestrightActivity(){
+			solo = new Solo(getInstrumentation(),getActivity());
+			
+			solo.assertCurrentActivity("wrong activiy", ConverterActivity.class);
+		}
 		
-		solo.assertCurrentActivity("wrong activiy", ConverterActivity.class);
-	}
-	
-	
+		
 }
